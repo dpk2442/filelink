@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 
@@ -25,6 +26,8 @@ except:
 
 ALLOWED_HOSTS = []
 
+
+# Application definition
 
 INSTALLED_APPS = [
     "shares.apps.SharesConfig",
@@ -100,3 +103,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Other settings
 
 APPEND_SLASH = False
+
+# Application settings
+
+FL_FILES_PATH = Path(os.getenv("FL_FILES_PATH", "./files")).resolve()

@@ -5,4 +5,5 @@ from . import views
 app_name = "shares"
 urlpatterns = [
     path("", views.index, name="index"),
+    path("files", views.files, name="files"),
 ]

@@ -1,4 +1,8 @@
+from pathlib import Path
+from typing import cast
+
 from django.apps import AppConfig
+from django.conf import settings
 
 
 class SharesConfig(AppConfig):

@@ -1,0 +1,27 @@
+{% extends "shares/base.html" %}
+
+{% block content %}
+<table border="1" cellspacing="0" cellpadding="5px">
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if parent_path %}
+        <tr>
+            <td><a href="{% url "shares:files" %}?path={{ parent_path }}">Parent</a></td>
+        </tr>
+        {% endif %}
+        {% for file in files %}
+        <tr>
+            {% if file.path %}
+            <td><a href="{% url "shares:files" %}?path={{ file.path }}">{{ file.name }}</a></td>
+            {% else %}
+            <td>{{ file.name }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
