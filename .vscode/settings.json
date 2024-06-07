@@ -1,0 +1,10 @@
+{
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.formatOnSave": true,
+    "autopep8.importStrategy": "fromEnvironment",
+}

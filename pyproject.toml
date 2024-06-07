@@ -1,0 +1,8 @@
+[project]
+requires-python = ">=3.12"
+name = "filelink"
+version = "0.1.0"
+dependencies = ["Django"]
+
+[project.optional-dependencies]
+dev = ["autopep8", "pip-tools"]
