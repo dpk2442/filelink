@@ -14,7 +14,9 @@ Clone the project and open it in the container. All of the needed extensions and
 automatically installed. Once it finishes, open the shell and run the following commands:
 
 ```
+mkdir data
 python manage.py migrate
+python manage.py generate_secret_key
 python manage.py runserver
 ```
 
@@ -27,7 +29,9 @@ Clone the project, navigate into it in the terminal, and run the following comma
 
 ```
 python -m pip install -r requirements_dev.txt
+mkdir data
 python manage.py migrate
+python manage.py generate_secret_key
 python manage.py runserver
 ```
 
