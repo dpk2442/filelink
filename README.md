@@ -45,6 +45,8 @@ python manage.py makemigrations shares
 
 ### Running tests
 
+Tests can be run using `pytest` or Django's built in test runner:
 ```
-python manage.py test shares
+python manage.py test
+pytest
 ```

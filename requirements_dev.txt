@@ -6,6 +6,8 @@
 #
 asgiref==3.8.1
     # via django
+autopep8==2.2.0
+    # via filelink (pyproject.toml)
 build==1.2.1
     # via pip-tools
 click==8.1.7
@@ -16,6 +18,8 @@ packaging==24.0
     # via build
 pip-tools==7.4.1
     # via filelink (pyproject.toml)
+pycodestyle==2.11.1
+    # via autopep8
 pyproject-hooks==1.1.0
     # via
     #   build

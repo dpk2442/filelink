@@ -5,4 +5,10 @@ version = "0.1.0"
 dependencies = ["Django"]
 
 [project.optional-dependencies]
-dev = ["autopep8", "pip-tools"]
+dev = ["autopep8", "pip-tools", "pytest-django"]
+
+[tool.setuptools]
+py-modules=[]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "filelink.settings.dev"
