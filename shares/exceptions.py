@@ -1,0 +1,2 @@
+class InvalidRequestPathException(Exception):
+    pass
