@@ -7,4 +7,6 @@
     "editor.defaultFormatter": "ms-python.autopep8",
     "editor.formatOnSave": true,
     "autopep8.importStrategy": "fromEnvironment",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "basic",
 }

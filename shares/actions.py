@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Any, Dict, List, Tuple
 
 from django.conf import settings
 from django.shortcuts import redirect
@@ -8,7 +8,8 @@ from django.shortcuts import redirect
 from shares.exceptions import InvalidRequestPathException
 
 
-def get_directories_and_files(requested_path: Path) -> Tuple[Dict, Dict, Path]:
+def get_directories_and_files(requested_path: Path) -> \
+        Tuple[List[Dict[str, Any]], List[Dict[str, Any]], Path | None]:
     files_root_path: Path = settings.FL_FILES_PATH
     scan_path = (files_root_path / requested_path).resolve()
     if requested_path.is_absolute() or not scan_path.is_relative_to(files_root_path):
