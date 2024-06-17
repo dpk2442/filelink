@@ -2,7 +2,6 @@ import contextlib
 from pathlib import Path
 from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 
 from shares import actions

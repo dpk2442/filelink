@@ -1,9 +1,9 @@
 import os
 from pathlib import Path
 
-from django.conf import settings
 from django.http import HttpRequest, HttpResponseBadRequest
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_GET
 
 from shares import actions
 from shares.exceptions import InvalidRequestPathException
@@ -13,6 +13,7 @@ def index(_: HttpRequest):
     return redirect("shares:files")
 
 
+@require_GET
 def files(request: HttpRequest):
     try:
         requested_path = Path(request.GET.get("path", default="."))
