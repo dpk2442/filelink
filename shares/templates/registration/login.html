@@ -1,0 +1,10 @@
+{% extends "shares/base.html" %}
+
+{% block content %}
+<form action="{% url "login" %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Login"></p>
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+{% endblock %}

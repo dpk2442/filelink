@@ -1,14 +1,38 @@
 from pathlib import Path
 from unittest import mock
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from shares import views
 from shares.exceptions import InvalidRequestPathException
 
 
-class TestGetFiles(TestCase):
+class AuthenticatedTestCase(TestCase):
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.user, _ = User.objects.get_or_create(username="test")
+        self.client.force_login(self.user)
+
+
+class LoginTest(TestCase):
+
+    def test_redirects_if_not_logged_in(self):
+        response = self.client.get(reverse("shares:files"))
+        self.assertRedirects(response,
+                             f"{reverse("login")}?next={reverse("shares:files")}")
+
+    def test_shows_logout_form_if_logged_in(self):
+        user, _ = User.objects.get_or_create(username="test")
+        self.client.force_login(user)
+        response = self.client.get(reverse("shares:files"))
+        self.assertContains(
+            response,
+            f"<form action=\"{reverse("logout")}\" method=\"post\">")
+
+
+class TestGetFiles(AuthenticatedTestCase):
 
     @mock.patch("shares.actions.get_directories_and_files")
     def test_displays_files_and_directories_in_order(self, mock_get_directories_and_files):
