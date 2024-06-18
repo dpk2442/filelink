@@ -1,0 +1,22 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Run Django Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Install Python dependencies
+        run: pip install --requirement requirements_dev.txt
+      - name: Create data directory
+        run: mkdir data
+      - name: Generate secret key
+        run: python manage.py generate_secret_key
+      - name: Run tests
+        run: python manage.py test
