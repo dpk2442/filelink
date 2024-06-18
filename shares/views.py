@@ -19,7 +19,7 @@ def index(_: HttpRequest):
 def files(request: HttpRequest):
     try:
         requested_path = Path(request.GET.get("path", default="."))
-        (files, directories, parent_path) = actions.get_directories_and_files(
+        (directories, files, parent_path) = actions.get_directories_and_files(
             requested_path)
     except InvalidRequestPathException:
         return redirect("shares:files")
@@ -27,5 +27,6 @@ def files(request: HttpRequest):
     return render(request, "shares/files.html", dict(
         title="Browse Files",
         parent_path=parent_path,
-        files=directories + files,
+        directories=directories,
+        files=files,
     ))

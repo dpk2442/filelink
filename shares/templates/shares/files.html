@@ -13,13 +13,14 @@
             <td><a href="{% url "shares:files" %}?path={{ parent_path }}">Parent</a></td>
         </tr>
         {% endif %}
+        {% for directory in directories %}
+        <tr>
+            <td><a href="{% url "shares:files" %}?path={{ directory.path }}">{{ directory.name }}</a></td>
+        </tr>
+        {% endfor %}
         {% for file in files %}
         <tr>
-            {% if file.path %}
-            <td><a href="{% url "shares:files" %}?path={{ file.path }}">{{ file.name }}</a></td>
-            {% else %}
             <td>{{ file.name }}</td>
-            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

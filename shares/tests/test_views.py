@@ -37,8 +37,8 @@ class TestGetFiles(AuthenticatedTestCase):
     @mock.patch("shares.actions.get_directories_and_files")
     def test_displays_files_and_directories_in_order(self, mock_get_directories_and_files):
         mock_get_directories_and_files.return_value = (
-            [dict(name="file1"), dict(name="file2")],
             [dict(name="dir1", path="dir1"), dict(name="dir2", path="dir2")],
+            [dict(name="file1"), dict(name="file2")],
             None,
         )
 
