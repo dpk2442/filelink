@@ -19,14 +19,16 @@ def get_directories_and_files(requested_path: Path) -> \
     files = []
     with os.scandir(scan_path) as scan:
         for f in scan:
+            path = (scan_path / f.name).relative_to(files_root_path)
             if f.is_dir():
                 directories.append(dict(
                     name=f"{f.name}/",
-                    path=(scan_path / f.name).relative_to(files_root_path),
+                    path=path,
                 ))
             elif f.is_file():
                 files.append(dict(
                     name=f.name,
+                    path=path,
                 ))
 
     directories.sort(key=lambda x: x["name"])

@@ -5,22 +5,26 @@
     <thead>
         <tr>
             <th>Name</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% if parent_path %}
         <tr>
             <td><a href="{% url "shares:files" %}?path={{ parent_path }}">Parent</a></td>
+            <td></td>
         </tr>
         {% endif %}
         {% for directory in directories %}
         <tr>
             <td><a href="{% url "shares:files" %}?path={{ directory.path }}">{{ directory.name }}</a></td>
+            <td></td>
         </tr>
         {% endfor %}
         {% for file in files %}
         <tr>
             <td>{{ file.name }}</td>
+            <td><a href="{% url "shares:new_share" %}?path={{ file.path }}">Share</a></td>
         </tr>
         {% endfor %}
     </tbody>

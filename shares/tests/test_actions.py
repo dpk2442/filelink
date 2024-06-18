@@ -48,26 +48,34 @@ class TestGetDirectoriesAndFiles(TestCase):
             dict(name="dir3/", path=Path("dir3")),
         ])
         self.assertListEqual(files, [
-            dict(name="file1"),
-            dict(name="file2"),
-            dict(name="file3"),
+            dict(name="file1", path=Path("file1")),
+            dict(name="file2", path=Path("file2")),
+            dict(name="file3", path=Path("file3")),
         ])
 
     @mock.patch("os.scandir")
     def test_returns_paths_for_nested_directories(self, mock_scandir):
         mock_scandir.return_value = contextlib.nullcontext([
-            _create_test_scandir_result(False, "dir1"),
+            _create_test_scandir_result(True, "file1"),
             _create_test_scandir_result(False, "dir2"),
+            _create_test_scandir_result(True, "file3"),
+            _create_test_scandir_result(True, "file2"),
+            _create_test_scandir_result(False, "dir1"),
             _create_test_scandir_result(False, "dir3"),
         ])
 
         requested_path = Path("path")
-        (directories, _, _) = actions.get_directories_and_files(requested_path)
+        (directories, files, _) = actions.get_directories_and_files(requested_path)
 
         self.assertListEqual(directories, [
             dict(name="dir1/", path=requested_path / "dir1"),
             dict(name="dir2/", path=requested_path / "dir2"),
             dict(name="dir3/", path=requested_path / "dir3"),
+        ])
+        self.assertListEqual(files, [
+            dict(name="file1", path=requested_path / "file1"),
+            dict(name="file2", path=requested_path / "file2"),
+            dict(name="file3", path=requested_path / "file3"),
         ])
 
     @mock.patch("os.scandir")
