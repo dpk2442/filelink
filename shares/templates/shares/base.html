@@ -8,6 +8,8 @@
     <body>
         <header>
             <a href="{% url "shares:index" %}">FileLink</a>
+            <a href="{% url "shares:shares" %}">Shares</a>
+            <a href="{% url "shares:files" %}">Files</a>
             {% if user.is_superuser %}
             <a href="{% url "admin:index" %}" target="_blank">
                 Admin

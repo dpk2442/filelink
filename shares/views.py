@@ -2,15 +2,15 @@ from pathlib import Path
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render, resolve_url
+from django.shortcuts import get_list_or_404, redirect, render, resolve_url
 from django.views.decorators.http import require_GET
 
-from shares import actions, forms
+from shares import actions, forms, models
 from shares.exceptions import InvalidRequestPathException
 
 
 def index(_: HttpRequest):
-    return redirect("shares:files")
+    return redirect("shares:shares")
 
 
 @login_required
@@ -28,6 +28,16 @@ def files(request: HttpRequest):
         parent_path=parent_path,
         directories=directories,
         files=files,
+    ))
+
+
+@login_required
+@require_GET
+def shares(request: HttpRequest):
+    shares = get_list_or_404(models.Share, user=request.user)
+    return render(request, "shares/shares.html", dict(
+        title="Shares",
+        shares=shares,
     ))
 
 

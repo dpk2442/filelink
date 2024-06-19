@@ -1,0 +1,22 @@
+{% extends "shares/base.html" %}
+
+{% block content %}
+<table border="1" cellspacing="0" cellpadding="5px">
+    <thead>
+        <tr>
+            <th>Path</th>
+            <th>Slug</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for share in shares %}
+        <tr>
+            <td>{% if share.directory %}{{ share.directory }}/{% endif %}{{ share.name }}</td>
+            <td>{{ share.slug }}</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -17,6 +17,13 @@ class AuthenticatedTestCase(TestCase):
         self.user, _ = User.objects.get_or_create(username="test")
         self.client.force_login(self.user)
 
+    def create_share_in_db(self, with_directory=True) -> models.Share:
+        return models.Share.objects.create(
+            directory=create_random_string() if with_directory else "",
+            name=create_random_string(),
+            user=self.user,
+        )
+
 
 class LoginTest(TestCase):
 
@@ -122,3 +129,15 @@ class TestNewShare(AuthenticatedTestCase):
         ))
         self.assertContains(
             response, "Share with this Containing Directory and Shared File Name already exists.")
+
+
+class TestGetShares(AuthenticatedTestCase):
+
+    def test_displays_shares(self):
+        share1 = self.create_share_in_db(with_directory=False)
+        share2 = self.create_share_in_db()
+        response = self.client.get(reverse("shares:shares"))
+        self.assertContains(response, f"""
+            <tr><td>{share1.name}</td><td>{share1.slug}</td><td></td></tr>
+            <tr><td>{share2.directory}/{share2.name}</td><td>{share2.slug}</td><td></td></tr>
+        """, html=True)
