@@ -1,12 +1,11 @@
-import os
 from pathlib import Path
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, resolve_url
 from django.views.decorators.http import require_GET
 
-from shares import actions
+from shares import actions, forms
 from shares.exceptions import InvalidRequestPathException
 
 
@@ -33,6 +32,27 @@ def files(request: HttpRequest):
 
 
 @login_required
-@require_GET
-def new_share(_: HttpRequest):
-    return HttpResponse("new share")
+def new_share(request: HttpRequest):
+    if request.method == "POST":
+        form = forms.ShareForm(request.POST)
+        if form.is_valid():
+            share = form.save(commit=False)
+            share.user = request.user
+            share.save()
+            return redirect("shares:index")
+    else:
+        directory = ""
+        name = ""
+        if request_path := request.GET.get("path"):
+            path = Path(request_path)
+            name = path.name
+            if (parent := path.parent.as_posix()) != ".":
+                directory = parent
+
+        form = forms.ShareForm(dict(directory=directory, name=name))
+
+    return render(request, "shares/share_form.html", dict(
+        title="New Share",
+        url=resolve_url("shares:new_share"),
+        form=form,
+    ))

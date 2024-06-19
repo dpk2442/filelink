@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
+from shares import forms, models
 from shares.exceptions import InvalidRequestPathException
+from .utils import create_random_string
 
 
 class AuthenticatedTestCase(TestCase):
@@ -77,3 +79,46 @@ class TestGetFiles(AuthenticatedTestCase):
         response = self.client.get(files_url)
         self.assertRedirects(response, files_url,
                              fetch_redirect_response=False)
+
+
+class TestNewShare(AuthenticatedTestCase):
+
+    def test_get(self):
+        response = self.client.get(reverse("shares:new_share"))
+        self.assertContains(response, "Containing Directory")
+        self.assertContains(response, "File Name")
+        self.assertIsNotNone(response.context["form"])
+        self.assertIsInstance(response.context["form"], forms.ShareForm)
+
+    def test_post_valid(self):
+        share_directory = create_random_string()
+        share_name = create_random_string()
+        response = self.client.post(reverse("shares:new_share"), dict(
+            directory=share_directory,
+            name=share_name,
+        ))
+        self.assertRedirects(response, reverse(
+            "shares:index"), fetch_redirect_response=False)
+
+        share = models.Share.objects.get(
+            directory=share_directory, name=share_name)
+        self.assertEqual(share.directory, share_directory)
+        self.assertEqual(share.name, share_name)
+        self.assertTrue(share.slug)
+
+    def test_post_invalid(self):
+        response = self.client.post(reverse("shares:new_share"))
+        self.assertContains(response, "This field is required.")
+
+    def test_requires_unique_path(self):
+        share_directory = create_random_string()
+        share_name = create_random_string()
+        models.Share.objects.create(
+            directory=share_directory, name=share_name, user=self.user)
+
+        response = self.client.post(reverse("shares:new_share"), dict(
+            directory=share_directory,
+            name=share_name,
+        ))
+        self.assertContains(
+            response, "Share with this Containing Directory and Shared File Name already exists.")
