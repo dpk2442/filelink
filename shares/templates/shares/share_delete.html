@@ -1,0 +1,11 @@
+{% extends "shares/base.html" %}
+
+{% block content %}
+<form action="{% url "shares:delete_share" share.id %}" method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete "{% if share.directory %}{{ share.directory }}/{% endif %}{{ share.name }}"?</p>
+    <div>
+        <input type="submit" value="Yes">
+    </div>
+</form>
+{% endblock %}

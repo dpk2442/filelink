@@ -2,7 +2,7 @@ from pathlib import Path
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_list_or_404, redirect, render, resolve_url
+from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render, resolve_url
 from django.views.decorators.http import require_GET
 
 from shares import actions, forms, models
@@ -65,4 +65,17 @@ def new_share(request: HttpRequest):
         title="New Share",
         url=resolve_url("shares:new_share"),
         form=form,
+    ))
+
+
+@login_required
+def delete_share(request: HttpRequest, share_id: int):
+    share = get_object_or_404(models.Share, id=share_id, user=request.user)
+    if request.method == "POST":
+        share.delete()
+        return redirect("shares:index")
+
+    return render(request, "shares/share_delete.html", dict(
+        title="Delete Share",
+        share=share,
     ))

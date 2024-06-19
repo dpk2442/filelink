@@ -141,3 +141,27 @@ class TestGetShares(AuthenticatedTestCase):
             <tr><td>{share1.name}</td><td>{share1.slug}</td><td></td></tr>
             <tr><td>{share2.directory}/{share2.name}</td><td>{share2.slug}</td><td></td></tr>
         """, html=True)
+
+
+class TestDeleteShare(AuthenticatedTestCase):
+
+    def test_get(self):
+        share = self.create_share_in_db()
+        response = self.client.get(
+            reverse("shares:delete_share", args=(share.id,)))
+        self.assertContains(
+            response, f"Are you sure you want to delete \"{share.directory}/{share.name}\"?")
+
+    def test_get_does_not_exist(self):
+        response = self.client.get(
+            reverse("shares:delete_share", args=(0,)))
+        self.assertEqual(response.status_code, 404)
+
+    def test_post(self):
+        share = self.create_share_in_db()
+        response = self.client.post(
+            reverse("shares:delete_share", args=(share.id,)))
+        self.assertRedirects(response, reverse(
+            "shares:index"), fetch_redirect_response=False)
+
+        self.assertQuerySetEqual(models.Share.objects.filter(id=share.id), [])

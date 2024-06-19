@@ -8,4 +8,6 @@ urlpatterns = [
     path("files", views.files, name="files"),
     path("shares", views.shares, name="shares"),
     path("shares/new", views.new_share, name="new_share"),
+    path("shares/<int:share_id>/delete",
+         views.delete_share, name="delete_share"),
 ]
