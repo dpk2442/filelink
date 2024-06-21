@@ -5,7 +5,7 @@
     <thead>
         <tr>
             <th>Path</th>
-            <th>Slug</th>
+            <th>Link</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -13,7 +13,7 @@
         {% for share in shares %}
         <tr>
             <td>{% if share.directory %}{{ share.directory }}/{% endif %}{{ share.name }}</td>
-            <td>{{ share.slug }}</td>
+            <td><a href="{% url "shares:download_share" share.slug %}">Direct Download</a></td>
             <td><a href="{% url "shares:delete_share" share.id %}">Delete</a></td>
         </tr>
         {% endfor %}

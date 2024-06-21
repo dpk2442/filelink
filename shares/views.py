@@ -1,9 +1,11 @@
 from pathlib import Path
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render, resolve_url
 from django.views.decorators.http import require_GET
+from django_sendfile import sendfile
 
 from shares import actions, forms, models
 from shares.exceptions import InvalidRequestPathException
@@ -79,3 +81,12 @@ def delete_share(request: HttpRequest, share_id: int):
         title="Delete Share",
         share=share,
     ))
+
+
+@require_GET
+def download_share(request: HttpRequest, share_slug: str):
+    share = get_object_or_404(models.Share, slug=share_slug)
+    root_path: Path = settings.FL_FILES_PATH
+    share_path = f"{share.directory}/{share.name}" \
+        if share.directory else share.name
+    return sendfile(request, (root_path / share_path).as_posix(), attachment=True, attachment_filename=share.name)

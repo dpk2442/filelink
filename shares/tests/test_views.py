@@ -2,12 +2,13 @@ from pathlib import Path
 from unittest import mock
 
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 
 from shares import forms, models
 from shares.exceptions import InvalidRequestPathException
-from .utils import create_random_string
+from .utils import create_random_string, get_user
 
 
 class AuthenticatedTestCase(TestCase):
@@ -138,8 +139,16 @@ class TestGetShares(AuthenticatedTestCase):
         share2 = self.create_share_in_db()
         response = self.client.get(reverse("shares:shares"))
         self.assertContains(response, f"""
-            <tr><td>{share1.name}</td><td>{share1.slug}</td><td></td></tr>
-            <tr><td>{share2.directory}/{share2.name}</td><td>{share2.slug}</td><td></td></tr>
+            <tr>
+                <td>{share1.name}</td>
+                <td><a href="{reverse("shares:download_share", args=(share1.slug,))}">Direct Download</a></td>
+                <td><a href="{reverse("shares:delete_share", args=(share1.id,))}">Delete</a></td>
+            </tr>
+            <tr>
+                <td>{share2.directory}/{share2.name}</td>
+                <td><a href="{reverse("shares:download_share", args=(share2.slug,))}">Direct Download</a></td>
+                <td><a href="{reverse("shares:delete_share", args=(share2.id,))}">Delete</a></td>
+            </tr>
         """, html=True)
 
     def test_displays_empty_shares(self):
@@ -169,3 +178,30 @@ class TestDeleteShare(AuthenticatedTestCase):
             "shares:index"), fetch_redirect_response=False)
 
         self.assertQuerySetEqual(models.Share.objects.filter(id=share.id), [])
+
+
+class TestDownloadShare(TestCase):
+
+    @mock.patch("django_sendfile.sendfile")
+    def test_valid_link(self, mock_sendfile):
+        mock_sendfile.return_value = HttpResponse()
+        mock_files_path = Path(__file__).resolve().parent
+
+        share = models.Share.objects.create(
+            directory=create_random_string(),
+            name=create_random_string(),
+            user=get_user(),
+        )
+
+        with self.settings(FL_FILES_PATH=mock_files_path):
+            response = self.client.get(
+                reverse("shares:download_share", args=(share.slug,)))
+            self.assertEqual(response.status_code, 200)
+
+        mock_sendfile.assert_called_once_with(
+            mock.ANY, (mock_files_path / share.directory / share.name).as_posix(), attachment=True, attachment_filename=share.name)
+
+    def test_invalid_link(self):
+        response = self.client.get(
+            reverse("shares:download_share", args=("slug",)))
+        self.assertEqual(response.status_code, 404)
