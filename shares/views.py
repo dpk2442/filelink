@@ -34,7 +34,7 @@ def files(request: HttpRequest):
 @login_required
 @require_GET
 def shares(request: HttpRequest):
-    shares = get_list_or_404(models.Share, user=request.user)
+    shares = models.Share.objects.filter(user=request.user)
     return render(request, "shares/shares.html", dict(
         title="Shares",
         shares=shares,

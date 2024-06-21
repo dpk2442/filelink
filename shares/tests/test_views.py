@@ -142,6 +142,10 @@ class TestGetShares(AuthenticatedTestCase):
             <tr><td>{share2.directory}/{share2.name}</td><td>{share2.slug}</td><td></td></tr>
         """, html=True)
 
+    def test_displays_empty_shares(self):
+        response = self.client.get(reverse("shares:shares"))
+        self.assertContains(response, "<tbody></tbody>", html=True)
+
 
 class TestDeleteShare(AuthenticatedTestCase):
 
