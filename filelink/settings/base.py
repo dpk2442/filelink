@@ -109,7 +109,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Other settings
 
 APPEND_SLASH = False
-
-# Application settings
-
-FL_FILES_PATH = Path(os.getenv("FL_FILES_PATH", "./files")).resolve()
