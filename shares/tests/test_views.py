@@ -219,8 +219,14 @@ class TestDownloadShare(TestCase):
                 reverse("shares:download_share", args=(share.slug,)))
             self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(
+            len(models.DownloadLog.objects.filter(share=share)), 1)
+
         mock_sendfile.assert_called_once_with(
-            mock.ANY, (mock_files_path / share.directory / share.name).as_posix(), attachment=True, attachment_filename=share.name)
+            mock.ANY,
+            (mock_files_path / share.directory / share.name).as_posix(),
+            attachment=True,
+            attachment_filename=share.name)
 
     def test_invalid_link(self):
         response = self.client.get(

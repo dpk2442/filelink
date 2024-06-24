@@ -3,7 +3,7 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
-from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render, resolve_url
+from django.shortcuts import get_object_or_404, redirect, render, resolve_url
 from django.views.decorators.http import require_GET
 import django_sendfile
 
@@ -99,4 +99,5 @@ def delete_share(request: HttpRequest, share_id: int):
 def download_share(request: HttpRequest, share_slug: str):
     share = get_object_or_404(models.Share, slug=share_slug)
     root_path: Path = settings.FL_FILES_PATH
+    models.DownloadLog.create_from_request_and_share(request, share)
     return django_sendfile.sendfile(request, (root_path / share.full_path).as_posix(), attachment=True, attachment_filename=share.name)
