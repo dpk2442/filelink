@@ -1,0 +1,12 @@
+/.git
+/.github
+/.vscode
+/data
+/.devcontainer.json
+/.dockerignore
+/.gitignore
+/Dockerfile
+/README.md
+
+*.egg-info
+__pycache__

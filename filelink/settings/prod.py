@@ -31,3 +31,13 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+# Application settings
+
+# Use project folder as fallback for local testing
+FL_FILES_PATH = Path(os.environ.get("FL_FILES_PATH") or "/files").resolve()
+
+# Sendfile settings
+
+SENDFILE_ROOT = FL_FILES_PATH
+SENDFILE_BACKEND = "django_sendfile.backends.xsendfile"

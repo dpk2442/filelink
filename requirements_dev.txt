@@ -40,6 +40,8 @@ pytest-django==4.8.0
     # via filelink (pyproject.toml)
 sqlparse==0.5.0
     # via django
+uwsgi==2.0.26
+    # via filelink (pyproject.toml)
 wheel==0.43.0
     # via pip-tools
 
