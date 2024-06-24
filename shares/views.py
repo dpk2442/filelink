@@ -99,6 +99,4 @@ def delete_share(request: HttpRequest, share_id: int):
 def download_share(request: HttpRequest, share_slug: str):
     share = get_object_or_404(models.Share, slug=share_slug)
     root_path: Path = settings.FL_FILES_PATH
-    share_path = f"{share.directory}/{share.name}" \
-        if share.directory else share.name
-    return django_sendfile.sendfile(request, (root_path / share_path).as_posix(), attachment=True, attachment_filename=share.name)
+    return django_sendfile.sendfile(request, (root_path / share.full_path).as_posix(), attachment=True, attachment_filename=share.name)

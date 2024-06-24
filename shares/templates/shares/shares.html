@@ -12,7 +12,7 @@
     <tbody>
         {% for share in shares %}
         <tr>
-            <td>{% if share.directory %}{{ share.directory }}/{% endif %}{{ share.name }}</td>
+            <td>{{ share.full_path }}</td>
             <td><a href="{% url "shares:download_share" share.slug %}">Direct Download</a></td>
             <td>
                 <a href="{% url "shares:share" share.id %}">Manage</a>

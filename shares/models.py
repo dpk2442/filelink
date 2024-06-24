@@ -23,5 +23,10 @@ class Share(models.Model):
                 fields=("directory", "name"), name="unique_path")
         ]
 
+    @property
+    def full_path(self):
+        return f"{self.directory}/{self.name}" \
+            if self.directory else self.name
+
     def __str__(self):
         return f"Share(id={self.id}, slug={self.slug}, directory={self.directory}, name={self.name}, user={self.user})"
