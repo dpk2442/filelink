@@ -8,6 +8,7 @@ urlpatterns = [
     path("files", views.files, name="files"),
     path("shares", views.shares, name="shares"),
     path("shares/new", views.new_share, name="new_share"),
+    path("shares/<int:share_id>", views.share, name="share"),
     path("shares/<int:share_id>/delete",
          views.delete_share, name="delete_share"),
     path("download/<share_slug>", views.download_share, name="download_share"),

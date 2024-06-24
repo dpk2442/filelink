@@ -142,18 +142,36 @@ class TestGetShares(AuthenticatedTestCase):
             <tr>
                 <td>{share1.name}</td>
                 <td><a href="{reverse("shares:download_share", args=(share1.slug,))}">Direct Download</a></td>
-                <td><a href="{reverse("shares:delete_share", args=(share1.id,))}">Delete</a></td>
+                <td>
+                    <a href="{reverse("shares:share", args=(share1.id,))}">Manage</a>
+                    <a href="{reverse("shares:delete_share", args=(share1.id,))}">Delete</a>
+                </td>
             </tr>
             <tr>
                 <td>{share2.directory}/{share2.name}</td>
                 <td><a href="{reverse("shares:download_share", args=(share2.slug,))}">Direct Download</a></td>
-                <td><a href="{reverse("shares:delete_share", args=(share2.id,))}">Delete</a></td>
+                <td>
+                    <a href="{reverse("shares:share", args=(share2.id,))}">Manage</a>
+                    <a href="{reverse("shares:delete_share", args=(share2.id,))}">Delete</a>
+                </td>
             </tr>
         """, html=True)
 
     def test_displays_empty_shares(self):
         response = self.client.get(reverse("shares:shares"))
         self.assertContains(response, "<tbody></tbody>", html=True)
+
+
+class TestGetShare(AuthenticatedTestCase):
+
+    def test_displays_share(self):
+        share = self.create_share_in_db()
+        response = self.client.get(reverse("shares:share", args=(share.id,)))
+        self.assertContains(response, f"<a href=\"{reverse(
+            "shares:delete_share", args=(share.id,))}\">Delete Share</a>", html=True)
+        self.assertContains(response, f"<a href=\"{reverse(
+            "shares:download_share", args=(share.slug,))}\">Direct Download</a>", html=True)
+        self.assertContains(response, f"{share.directory}/{share.name}")
 
 
 class TestDeleteShare(AuthenticatedTestCase):

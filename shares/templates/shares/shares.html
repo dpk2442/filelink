@@ -14,7 +14,10 @@
         <tr>
             <td>{% if share.directory %}{{ share.directory }}/{% endif %}{{ share.name }}</td>
             <td><a href="{% url "shares:download_share" share.slug %}">Direct Download</a></td>
-            <td><a href="{% url "shares:delete_share" share.id %}">Delete</a></td>
+            <td>
+                <a href="{% url "shares:share" share.id %}">Manage</a>
+                <a href="{% url "shares:delete_share" share.id %}">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

@@ -44,6 +44,16 @@ def shares(request: HttpRequest):
 
 
 @login_required
+@require_GET
+def share(request: HttpRequest, share_id: int):
+    share = get_object_or_404(models.Share, id=share_id)
+    return render(request, "shares/share.html", dict(
+        title=f"Share \"{share.name}\"",
+        share=share,
+    ))
+
+
+@login_required
 def new_share(request: HttpRequest):
     if request.method == "POST":
         form = forms.ShareForm(request.POST)

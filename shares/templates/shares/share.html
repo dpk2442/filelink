@@ -1,0 +1,7 @@
+{% extends "shares/base.html" %}
+
+{% block content %}
+<p><a href="{% url "shares:delete_share" share.id %}">Delete Share</a></p>
+<p>Full path: {% if share.directory %}{{ share.directory }}/{% endif %}{{ share.name }}</p>
+<p><a href="{% url "shares:download_share" share.slug %}">Direct Download</a></p>
+{% endblock %}
