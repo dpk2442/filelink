@@ -53,6 +53,9 @@ class TestGetFiles(AuthenticatedTestCase):
             None,
         )
 
+        file1_share = models.Share.objects.create(
+            directory="", name="file1", user=self.user)
+
         files_url = reverse("shares:files")
         new_share_url = reverse("shares:new_share")
         response = self.client.get(files_url)
@@ -61,7 +64,7 @@ class TestGetFiles(AuthenticatedTestCase):
         self.assertContains(response, f"""
         <tr><td><a href="{files_url}?path=dir1">dir1</a></td><td></td></tr>
         <tr><td><a href="{files_url}?path=dir2">dir2</a></td><td></td></tr>
-        <tr><td>file1</td><td><a href="{new_share_url}?path=file1">Share</a></td></tr>
+        <tr><td>file1</td><td><a href="{reverse("shares:share", args=(file1_share.id,))}">Manage</a></td></tr>
         <tr><td>file2</td><td><a href="{new_share_url}?path=file2">Share</a></td></tr>
                             """, html=True)
 

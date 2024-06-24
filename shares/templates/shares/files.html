@@ -1,4 +1,5 @@
 {% extends "shares/base.html" %}
+{% load shares_filters %}
 
 {% block content %}
 <table border="1" cellspacing="0" cellpadding="5px">
@@ -24,7 +25,13 @@
         {% for file in files %}
         <tr>
             <td>{{ file.name }}</td>
-            <td><a href="{% url "shares:new_share" %}?path={{ file.path }}">Share</a></td>
+            <td>
+                {% if file.name in shares %}
+                <a href="{% url "shares:share" shares|get_key:file.name|get_attr:"id" %}">Manage</a>
+                {% else %}
+                <a href="{% url "shares:new_share" %}?path={{ file.path }}">Share</a>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>

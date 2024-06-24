@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Tuple
 from django.conf import settings
 from django.shortcuts import redirect
 
+from shares import models
 from shares.exceptions import InvalidRequestPathException
 
 
@@ -39,3 +40,11 @@ def get_directories_and_files(requested_path: Path) -> \
         parent_path = (scan_path / "..").resolve().relative_to(files_root_path)
 
     return (directories, files, parent_path)
+
+
+def get_shares_for_directory(directory: Path) -> Dict[str, models.Share]:
+    path = directory.as_posix()
+    if path == ".":
+        path = ""
+
+    return {s.name: s for s in models.Share.objects.filter(directory=path)}

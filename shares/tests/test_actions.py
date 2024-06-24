@@ -4,8 +4,9 @@ from unittest import mock
 
 from django.test import TestCase
 
-from shares import actions
+from shares import actions, models
 from shares.exceptions import InvalidRequestPathException
+from .utils import get_user
 
 
 def _create_test_scandir_result(is_file, name):
@@ -97,3 +98,27 @@ class TestGetDirectoriesAndFiles(TestCase):
         requested_path = Path("child1/child2")
         (_, _, parent_path) = actions.get_directories_and_files(requested_path)
         self.assertEqual(parent_path, Path("child1"))
+
+
+class TestGetSharesForDirectory(TestCase):
+
+    def test_gets_shares_for_path(self):
+        user = get_user()
+        root_share = models.Share.objects.create(
+            directory="", name="root.txt", user=user)
+        child_share = models.Share.objects.create(
+            directory="child", name="child.txt", user=user)
+
+        # root path
+        self.assertDictEqual(actions.get_shares_for_directory(Path(".")), {
+            root_share.name: root_share,
+        })
+
+        # child path
+        self.assertDictEqual(actions.get_shares_for_directory(Path("child")), {
+            child_share.name: child_share,
+        })
+
+        # other path
+        self.assertDictEqual(
+            actions.get_shares_for_directory(Path("other")), {})

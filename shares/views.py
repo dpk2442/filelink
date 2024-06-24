@@ -25,11 +25,13 @@ def files(request: HttpRequest):
     except InvalidRequestPathException:
         return redirect("shares:files")
 
+    shares_for_path = actions.get_shares_for_directory(requested_path)
     return render(request, "shares/files.html", dict(
         title="Browse Files",
         parent_path=parent_path,
         directories=directories,
         files=files,
+        shares=shares_for_path,
     ))
 
 
