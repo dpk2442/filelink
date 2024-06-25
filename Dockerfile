@@ -1,5 +1,5 @@
 # Python build container
-FROM python:3.12-slim as python-build
+FROM python:3.12-slim AS python-build
 WORKDIR /app
 COPY requirements.txt .
 RUN apt-get update && \
