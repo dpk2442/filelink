@@ -1,4 +1,5 @@
 import secrets
+import string
 from typing import Any, Dict, Self
 
 from django.contrib.auth import get_user_model
@@ -7,8 +8,11 @@ from django.http import HttpRequest
 from django.utils import timezone
 
 
+SLUG_CHARACTERS = string.ascii_letters + string.digits
+
+
 def default_slug() -> str:
-    return secrets.token_urlsafe(15)
+    return "".join(secrets.choice(SLUG_CHARACTERS) for _ in range(15))
 
 
 def get_ip_from_meta(meta: Dict[str, Any]) -> str:
