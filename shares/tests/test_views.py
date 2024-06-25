@@ -232,3 +232,15 @@ class TestDownloadShare(TestCase):
         response = self.client.get(
             reverse("shares:download_share", args=("slug",)))
         self.assertEqual(response.status_code, 404)
+
+    def test_cannot_download_disabled_share(self):
+        share = models.Share.objects.create(
+            download_enabled=False,
+            directory=create_random_string(),
+            name=create_random_string(),
+            user=get_user()
+        )
+
+        response = self.client.get(
+            reverse("shares:download_share", args=(share.slug,)))
+        self.assertEqual(response.status_code, 404)

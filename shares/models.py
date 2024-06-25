@@ -22,6 +22,7 @@ def get_ip_from_meta(meta: Dict[str, Any]) -> str:
 
 class Share(models.Model):
     id = models.BigAutoField(primary_key=True)
+    download_enabled = models.BooleanField("Enable Download", default=True)
     slug = models.SlugField("Slug", max_length=15,
                             unique=True, default=default_slug)
     directory = models.CharField(
@@ -41,7 +42,14 @@ class Share(models.Model):
             if self.directory else self.name
 
     def __str__(self):
-        return f"Share(id={self.id}, slug={self.slug}, directory={self.directory}, name={self.name}, user={self.user})"
+        return "Share(" \
+            f"id={self.id}," \
+            f"download_enabled={self.download_enabled}," \
+            f"slug={self.slug}," \
+            f"directory={self.directory}," \
+            f"name={self.name}," \
+            f"user={self.user}" \
+            ")"
 
 
 class DownloadLog(models.Model):
