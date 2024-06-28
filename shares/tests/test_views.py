@@ -41,6 +41,13 @@ class LoginTest(TestCase):
             response,
             f"<form action=\"{reverse("logout")}\" method=\"post\">")
 
+    def test_hides_nav_links_if_not_logged_in(self):
+        response = self.client.get(reverse("login"))
+        self.assertNotContains(response,
+                               f"<a href=\"{reverse("shares:shares")}\">Shares</a>", html=True)
+        self.assertNotContains(response,
+                               f"<a href=\"{reverse("shares:files")}\">Files</a>", html=True)
+
 
 class TestGetFiles(AuthenticatedTestCase):
 
