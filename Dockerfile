@@ -28,5 +28,8 @@ COPY . .
 # Copy virtual env
 COPY --from=python-build /app/.venv ./.venv
 
+# Ensure static directory exists and is writeable
+RUN mkdir /app/static && chmod 777 /app/static
+
 # Run start script
 CMD ["./run.sh"]

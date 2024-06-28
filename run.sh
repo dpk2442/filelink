@@ -13,5 +13,8 @@ python manage.py migrate
 # Generate secret key file if needed
 python manage.py generate_secret_key
 
+# Collect static files
+python manage.py collectstatic
+
 # Start uwsgi server
 exec uwsgi uwsgi.ini
