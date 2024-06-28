@@ -6,7 +6,6 @@ source .venv/bin/activate
 
 # Create data folder
 mkdir -p data
-chown -R www-data: data
 
 # Run database migrations
 python manage.py migrate
