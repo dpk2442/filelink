@@ -251,3 +251,29 @@ class TestDownloadShare(TestCase):
         response = self.client.get(
             reverse("shares:download_share", args=(share.slug,)))
         self.assertEqual(response.status_code, 404)
+
+    @mock.patch("django_sendfile.sendfile")
+    def test_valid_without_force_download(self, mock_sendfile):
+        mock_sendfile.return_value = HttpResponse()
+        mock_files_path = Path(__file__).resolve().parent
+
+        share = models.Share.objects.create(
+            directory=create_random_string(),
+            name=create_random_string(),
+            user=get_user(),
+            force_download=False,
+        )
+
+        with self.settings(FL_FILES_PATH=mock_files_path):
+            response = self.client.get(
+                reverse("shares:download_share", args=(share.slug,)))
+            self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(
+            len(models.DownloadLog.objects.filter(share=share)), 1)
+
+        mock_sendfile.assert_called_once_with(
+            mock.ANY,
+            (mock_files_path / share.directory / share.name).as_posix(),
+            attachment=False,
+            attachment_filename=share.name)

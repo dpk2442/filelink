@@ -103,4 +103,4 @@ def download_share(request: HttpRequest, share_slug: str):
 
     root_path: Path = settings.FL_FILES_PATH
     models.DownloadLog.create_from_request_and_share(request, share)
-    return django_sendfile.sendfile(request, (root_path / share.full_path).as_posix(), attachment=True, attachment_filename=share.name)
+    return django_sendfile.sendfile(request, (root_path / share.full_path).as_posix(), attachment=share.force_download, attachment_filename=share.name)
