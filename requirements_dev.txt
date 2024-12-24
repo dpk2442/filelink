@@ -6,13 +6,13 @@
 #
 asgiref==3.8.1
     # via django
-autopep8==2.2.0
+autopep8==2.3.1
     # via filelink (pyproject.toml)
-build==1.2.1
+build==1.2.2.post1
     # via pip-tools
-click==8.1.7
+click==8.1.8
     # via pip-tools
-django==5.0.6
+django==5.1.4
     # via
     #   django-sendfile2
     #   filelink (pyproject.toml)
@@ -20,7 +20,7 @@ django-sendfile2==0.7.1
     # via filelink (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
-packaging==24.0
+packaging==24.2
     # via
     #   build
     #   pytest
@@ -28,21 +28,21 @@ pip-tools==7.4.1
     # via filelink (pyproject.toml)
 pluggy==1.5.0
     # via pytest
-pycodestyle==2.11.1
+pycodestyle==2.12.1
     # via autopep8
-pyproject-hooks==1.1.0
+pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pytest==8.2.2
+pytest==8.3.4
     # via pytest-django
-pytest-django==4.8.0
+pytest-django==4.9.0
     # via filelink (pyproject.toml)
-sqlparse==0.5.0
+sqlparse==0.5.3
     # via django
-uwsgi==2.0.26
+uwsgi==2.0.28
     # via filelink (pyproject.toml)
-wheel==0.43.0
+wheel==0.45.1
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:

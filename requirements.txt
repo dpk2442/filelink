@@ -6,13 +6,13 @@
 #
 asgiref==3.8.1
     # via django
-django==5.0.6
+django==5.1.4
     # via
     #   django-sendfile2
     #   filelink (pyproject.toml)
 django-sendfile2==0.7.1
     # via filelink (pyproject.toml)
-sqlparse==0.5.0
+sqlparse==0.5.3
     # via django
-uwsgi==2.0.26
+uwsgi==2.0.28
     # via filelink (pyproject.toml)
