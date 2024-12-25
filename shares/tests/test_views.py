@@ -8,22 +8,7 @@ from django.urls import reverse
 
 from shares import forms, models
 from shares.exceptions import InvalidRequestPathException
-from .utils import create_random_string, get_user
-
-
-class AuthenticatedTestCase(TestCase):
-
-    def setUp(self) -> None:
-        super().setUp()
-        self.user, _ = User.objects.get_or_create(username="test")
-        self.client.force_login(self.user)
-
-    def create_share_in_db(self, with_directory=True) -> models.Share:
-        return models.Share.objects.create(
-            directory=create_random_string() if with_directory else "",
-            name=create_random_string(),
-            user=self.user,
-        )
+from .utils import AuthenticatedTestCase, create_random_string, get_user
 
 
 class LoginTest(TestCase):
@@ -154,6 +139,7 @@ class TestGetShares(AuthenticatedTestCase):
                 <td><a href="{reverse("shares:download_share", args=(share1.slug,))}">Direct Download</a></td>
                 <td>
                     <a href="{reverse("shares:share", args=(share1.id,))}">Manage</a>
+                    <a href="{reverse("shares:edit_share", args=(share1.id,))}">Edit</a>
                     <a href="{reverse("shares:delete_share", args=(share1.id,))}">Delete</a>
                 </td>
             </tr>
@@ -162,6 +148,7 @@ class TestGetShares(AuthenticatedTestCase):
                 <td><a href="{reverse("shares:download_share", args=(share2.slug,))}">Direct Download</a></td>
                 <td>
                     <a href="{reverse("shares:share", args=(share2.id,))}">Manage</a>
+                    <a href="{reverse("shares:edit_share", args=(share2.id,))}">Edit</a>
                     <a href="{reverse("shares:delete_share", args=(share2.id,))}">Delete</a>
                 </td>
             </tr>

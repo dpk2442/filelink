@@ -83,6 +83,24 @@ def new_share(request: HttpRequest):
 
 
 @login_required
+def edit_share(request: HttpRequest, share_id: int):
+    share = get_object_or_404(models.Share, id=share_id)
+    if request.method == "POST":
+        form = forms.ShareForm(request.POST, instance=share)
+        if form.is_valid():
+            form.save()
+            return redirect("shares:index")
+    else:
+        form = forms.ShareForm(instance=share)
+
+    return render(request, "shares/share_form.html", dict(
+        title="Edit Share",
+        url=resolve_url("shares:edit_share", share_id=share_id),
+        form=form,
+    ))
+
+
+@login_required
 def delete_share(request: HttpRequest, share_id: int):
     share = get_object_or_404(models.Share, id=share_id, user=request.user)
     if request.method == "POST":
