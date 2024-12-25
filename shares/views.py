@@ -73,7 +73,8 @@ def new_share(request: HttpRequest):
             if (parent := path.parent.as_posix()) != ".":
                 directory = parent
 
-        form = forms.ShareForm(dict(directory=directory, name=name))
+        form = forms.ShareForm(
+            dict(directory=directory, name=name, download_enabled=True, force_download=True))
 
     return render(request, "shares/share_form.html", dict(
         title="New Share",

@@ -12,6 +12,16 @@ class TestNewShare(AuthenticatedTestCase):
         response = self.client.get(reverse("shares:new_share"))
         self.assertContains(response, "Containing Directory")
         self.assertContains(response, "File Name")
+        self.assertContains(response, "Enable Download")
+        self.assertContains(
+            response,
+            "<input type='checkbox' name='download_enabled' id='id_download_enabled' checked>",
+            html=True)
+        self.assertContains(response, "Force Downloading")
+        self.assertContains(
+            response,
+            "<input type='checkbox' name='force_download' id='id_force_download' checked>",
+            html=True)
         self.assertIsNotNone(response.context["form"])
         self.assertIsInstance(response.context["form"], forms.ShareForm)
 
@@ -159,3 +169,18 @@ class ShareEditViewTests(AuthenticatedTestCase):
         self.assertContains(response, "This field is required.", 1)
         db_share = models.Share.objects.get(pk=share.id)
         self.assertNotEqual("new_dir", db_share.directory)
+
+    def test_can_edit_share_settings(self):
+        share = self.create_share_in_db()
+        response = self.client.post(reverse("shares:edit_share", args=(share.id,)), dict(
+            directory=share.directory,
+            name=share.name,
+            download_enabled=not share.download_enabled,
+            force_download=not share.force_download,
+        ))
+        self.assertRedirects(response, reverse(
+            "shares:index"), fetch_redirect_response=False)
+
+        db_share = models.Share.objects.get(pk=share.id)
+        self.assertEqual(not share.download_enabled, db_share.download_enabled)
+        self.assertEqual(not share.force_download, db_share.force_download)
