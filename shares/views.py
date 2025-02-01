@@ -2,7 +2,7 @@ from pathlib import Path
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpRequest, HttpResponseNotFound
+from django.http import HttpRequest, HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render, resolve_url
 from django.views.decorators.http import require_GET
 import django_sendfile
@@ -122,4 +122,10 @@ def download_share(request: HttpRequest, share_slug: str):
 
     root_path: Path = settings.FL_FILES_PATH
     models.DownloadLog.create_from_request_and_share(request, share)
-    return django_sendfile.sendfile(request, (root_path / share.full_path).as_posix(), attachment=share.force_download, attachment_filename=share.name)
+    response: HttpResponse = django_sendfile.sendfile(
+        request,
+        (root_path / share.full_path).as_posix(),
+        attachment=share.force_download,
+        attachment_filename=share.name)
+    response["Accept-Ranges"] = "bytes"
+    return response

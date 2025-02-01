@@ -26,6 +26,7 @@ class TestDownloadShare(TestCase):
             response = self.client.get(
                 reverse("shares:download_share", args=(share.slug,)))
             self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.headers.get("Accept-Ranges"), "bytes")
 
         self.assertEqual(
             len(models.DownloadLog.objects.filter(share=share)), 1)
@@ -69,6 +70,7 @@ class TestDownloadShare(TestCase):
             response = self.client.get(
                 reverse("shares:download_share", args=(share.slug,)))
             self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.headers.get("Accept-Ranges"), "bytes")
 
         self.assertEqual(
             len(models.DownloadLog.objects.filter(share=share)), 1)
